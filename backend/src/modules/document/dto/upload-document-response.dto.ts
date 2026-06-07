@@ -1,3 +1,4 @@
 export class UploadDocumentResponseDto {
-  filename: string;
+  documentId: string;
+  chunksCreated: number;
 }
