@@ -17,7 +17,7 @@ export class DocumentController {
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file', pdfUploadOptions))
-  uploadDocument(
+  async uploadDocument(
     @UploadedFile(
       new ParseFilePipe({
         validators: [
@@ -26,7 +26,7 @@ export class DocumentController {
       }),
     )
     file: Express.Multer.File,
-  ): UploadDocumentResponseDto {
-    return this.documentService.saveUploadedFile(file);
+  ): Promise<UploadDocumentResponseDto> {
+    return await this.documentService.saveUploadedFile(file);
   }
 }
