@@ -3,12 +3,15 @@ import { join } from 'path';
 import { PdfParserService } from './pdf-parser.service';
 import { ChunkingService } from './chunking/chunking.service';
 import { PrismaService } from '../../prisma/prisma.service';
+import {EmbeddingService} from './embedding/embedding.service'
+
 @Injectable()
 export class DocumentService {
   constructor(
     private readonly pdfParserService: PdfParserService,
     private readonly chunkingService: ChunkingService,
   private readonly prisma: PrismaService,
+  private readonly embeddingService: EmbeddingService,
   ) {}
 
   async saveUploadedFile(file: Express.Multer.File) {
@@ -31,11 +34,14 @@ export class DocumentService {
       });
     
     for (let i = 0; i < chunks.length; i++) {
+      const embedding =
+  await this.embeddingService.getEmbedding(chunks[i]);
       await this.prisma.documentChunk.create({
         data: {
           content: chunks[i],
           chunkIndex: i,
           documentId: document.id,
+          embedding,
         },
       });
     }
