@@ -8,6 +8,6 @@ import { EmbeddingService } from './embedding/embedding.service';
 @Module({
   controllers: [DocumentController],
   providers: [DocumentService, PdfParserService, ChunkingService, EmbeddingService],
-  exports: [PdfParserService],
+  exports: [PdfParserService, EmbeddingService],
 })
 export class DocumentModule {}
