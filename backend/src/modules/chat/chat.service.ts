@@ -9,3 +9,4 @@ export class ChatService {
     };
   }
 }
+//return a dummy response for now, we will implement the actual logic later
