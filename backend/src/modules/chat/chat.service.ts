@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RetrievalService } from './retrieval/retrieval.service';
 import { EmbeddingService } from '../document/embedding/embedding.service';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { LlmService } from './llm/llm.service';
 
 @Injectable()
 export class ChatService {
@@ -9,6 +10,7 @@ export class ChatService {
     private readonly prisma: PrismaService,
     private readonly embeddingService: EmbeddingService,
     private readonly retrievalService: RetrievalService,
+    private readonly llmService: LlmService,
   ) {}
   async ask(question: string) {
   const queryEmbedding =
@@ -31,11 +33,20 @@ export class ChatService {
       queryEmbedding,
       formattedChunks,
     );
-
-  return {
+    const context = matches
+  .map((chunk) => chunk.content)
+  .join('\n\n');
+  const answer =
+  await this.llmService.generateAnswer(
     question,
-    matches,
-  };
+    context,
+  );
+
+return {
+  answer,
+  matches,
+};
+
 }
 }
 //return a dummy response for now, we will implement the actual logic later
