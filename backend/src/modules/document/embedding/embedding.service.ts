@@ -1,31 +1,31 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import { retry } from 'src/common/utils/retry.util';
 
 @Injectable()
 export class EmbeddingService {
-  private readonly ollamaUrl = 'http://localhost:11434/api/embed';  // changed from /api/embeddings
-  private readonly model = 'all-minilm';  // match exactly what `ollama list` shows
+  private readonly ollamaUrl = 'http://localhost:11434/api/embed';
+  private readonly model = 'all-minilm';
 
   async getEmbedding(text: string): Promise<number[]> {
-    try {
+    return retry(async () => {
       const response = await fetch(this.ollamaUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
           model: this.model,
-          input: text,  // changed from `prompt` to `input`
+          input: text,
         }),
       });
 
       if (!response.ok) {
-        const errorBody = await response.text();
-        throw new Error(`Ollama error: ${response.statusText} - ${errorBody}`);
+        throw new Error('Embedding generation failed');
       }
 
       const data = await response.json();
-      return data.embeddings[0];  // changed from data.embedding
-    } catch (error) {
-      console.error('Embedding error:', error);
-      throw new InternalServerErrorException('Failed to generate embedding');
-    }
+
+      return data.embeddings[0];
+    });
   }
 }
