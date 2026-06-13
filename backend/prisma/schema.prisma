@@ -19,18 +19,17 @@ model Document {
 }
 
 model DocumentChunk {
-  id          String   @id @default(cuid())
+  id         String @id @default(cuid())
+  content    String
+  embedding  Json?
+  chunkIndex Int
 
-  content     String
+  documentId String
+  document   Document @relation(fields: [documentId], references: [id])
 
-  embedding   Json?
+  createdAt DateTime @default(now())
 
-  chunkIndex  Int
-
-  documentId  String
-  document    Document @relation(fields: [documentId], references: [id])
-
-  createdAt   DateTime @default(now())
+  @@index([documentId])
 }
 model Chat {
   id        String   @id @default(cuid())
@@ -47,4 +46,6 @@ model Message {
   chat      Chat @relation(fields: [chatId], references: [id])
 
   createdAt DateTime @default(now())
+
+  @@index([chatId])
 }
