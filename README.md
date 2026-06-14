@@ -110,7 +110,7 @@ npx prisma db push
 5. Start server
 npm run start:dev
 
-### 📡 API Endpoints
+## 📡 API Endpoints
 
 Upload Document
 POST /documents/upload
@@ -132,19 +132,22 @@ Response:
   "answer": "...",
   "matches": [...]
 }
-🔐 Security Features
+
+## 🔐 Security Features
 Helmet (HTTP security headers)
 Compression (performance optimization)
 Rate limiting (anti-abuse protection)
 DTO validation (input safety)
 File validation (PDF-only uploads)
-⚡ Performance Optimizations
+
+## ⚡ Performance Optimizations
 pgvector indexing for fast similarity search
 Chunk-based embedding storage
 Selective database queries
 Local LLM inference (Ollama)
 Response compression
-🧠 Key AI Concepts Implemented
+
+## 🧠 Key AI Concepts Implemented
 Embeddings
 Semantic search
 Vector databases
