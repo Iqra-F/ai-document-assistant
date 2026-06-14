@@ -109,7 +109,9 @@ npx prisma generate
 npx prisma db push
 5. Start server
 npm run start:dev
-📡 API Endpoints
+
+### 📡 API Endpoints
+
 Upload Document
 POST /documents/upload
 
